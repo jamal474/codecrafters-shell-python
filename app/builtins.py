@@ -1,4 +1,5 @@
 from .Enums import Type
+from .executable import executable_factory, Command
 
 def builtin_factory(command: str):
     command_type = command.split(maxsplit=1)[0]
@@ -13,10 +14,10 @@ def builtin_factory(command: str):
             return None
 
 
-class BuiltinCommand:
+class BuiltinCommand(Command):
 
     def __init__(self, command_str: str):
-        self.command_param = " ".join(command_str.split()[1:])
+        super().__init__(command_str)
         self.type = Type.BUILTIN
 
     def operation(self):
@@ -37,7 +38,12 @@ class TypeBuiltinCommand(BuiltinCommand):
     def operation(self):
         command = builtin_factory(self.command_param)
         if command is None:
-            print(f"{self.command_param.split(maxsplit=1)[0]}: not found")
+            # Could be a executable
+            command = executable_factory(self.command_param)
+            if command is not None:
+                print(f"{command} is {command.path}")
+            else:
+                print(f"{self.command_param.split(maxsplit=1)[0]}: not found")
         elif command.type == Type.BUILTIN:
             print(f"{self.command_param.split(maxsplit=1)[0]} is a shell builtin")
 
