@@ -11,10 +11,12 @@ def executable_factory(command: str):
     paths = path_string.split(":")
     for path in paths:
         try:
+            print(path, ": normal")
             folder_elements = os.listdir(path)
             if command_type in folder_elements and os.access(path + command_type, os.X_OK):
                 return ExecutableCommand(command, path + command_type)
         except:
+            print(path, ": error")
             continue
 
     return None
