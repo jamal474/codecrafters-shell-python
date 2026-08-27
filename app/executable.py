@@ -3,7 +3,7 @@ from .Enums import Type
 
 def executable_factory(command: str):
     command_type = command.split(maxsplit=1)[0]
-    path_string = os.env.get("PATH", None)
+    path_string = os.getenv("PATH", None)
 
     if path_string is None:
         return None
