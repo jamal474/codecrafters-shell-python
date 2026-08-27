@@ -16,7 +16,7 @@ def builtin_factory(command: str):
 class BuiltinCommand:
 
     def __init__(self, command_str: str):
-        self.command_param = " ".join(command_str.split(" ")[1:])
+        self.command_param = " ".join(command_str.split()[1:])
         self.type = Type.BUILTIN
 
     def operation(self):
@@ -30,7 +30,7 @@ class ExitBuiltinCommand(BuiltinCommand):
 class EchoBuiltinCommand(BuiltinCommand):
     def operation(self):
         print_words = self.command_param
-        print(" ".join(print_words))
+        print(print_words)
         return False, None
 
 class TypeBuiltinCommand(BuiltinCommand):
