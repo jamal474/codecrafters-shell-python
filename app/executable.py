@@ -8,15 +8,13 @@ def executable_factory(command: str):
     if path_string is None:
         return None
 
-    paths = path_string.split(":")
+    paths = path_string.split(os.pathsep)
     for path in paths:
         try:
-            print(path, ": normal")
             folder_elements = os.listdir(path)
-            if command_type in folder_elements and os.access(path + command_type, os.X_OK):
-                return ExecutableCommand(command, path + command_type)
+            if command_type in folder_elements and os.access(path + os.path.sep + command_type, os.X_OK):
+                return ExecutableCommand(command, path + os.path.sep + command_type)
         except:
-            print(path, ": error")
             continue
 
     return None
