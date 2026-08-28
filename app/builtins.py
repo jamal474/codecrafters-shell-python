@@ -1,5 +1,6 @@
 from .Enums import Type
 from .executable import executable_factory, Command
+import os
 
 def builtin_factory(command: str):
     command_type = command.split(maxsplit=1)[0]
@@ -10,6 +11,8 @@ def builtin_factory(command: str):
             return EchoBuiltinCommand(command)
         case "type":
             return TypeBuiltinCommand(command)
+        case "pwd":
+            return PwdBuiltinCommand(command)
         case _:
             return None
 
@@ -47,4 +50,9 @@ class TypeBuiltinCommand(BuiltinCommand):
         elif command.type == Type.BUILTIN:
             print(f"{self.command_param.split(maxsplit=1)[0]} is a shell builtin")
 
+        return False, None
+
+class PwdBuiltinCommand(BuiltinCommand):
+    def run(self):
+        print(os.getcwd())
         return False, None
