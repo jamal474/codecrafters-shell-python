@@ -66,6 +66,6 @@ class CdBuiltinCommand(BuiltinCommand):
             if os.path.exists(path_string):
                 Command.cwd["path"] = path_string
             else:
-                print(f"cd: {self.command_str}: No such file or directory")
+                print(f"cd: {self.command_param}: No such file or directory")
         
         return False, None
