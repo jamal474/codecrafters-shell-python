@@ -61,10 +61,10 @@ class PwdBuiltinCommand(BuiltinCommand):
 
 class CdBuiltinCommand(BuiltinCommand):
     def run(self):
-        path_string = self.command_str
+        path_string = self.command_param
         if os.path.isabs(path_string):
             if os.path.exists(path_string):
-                os.chdir(path_string)
+                Command.cwd["path"] = path_string
             else:
                 print(f"cd: {self.command_str}: No such file or directory")
         

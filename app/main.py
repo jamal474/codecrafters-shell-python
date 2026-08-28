@@ -1,6 +1,6 @@
-import sys
+import sys, os
 from .builtins import builtin_factory
-from .executable import executable_factory
+from .executable import executable_factory, Command
 
 def _command_resolver(command_string: str):
     command_obj = builtin_factory(command_string)
@@ -12,6 +12,9 @@ def _command_resolver(command_string: str):
 def main():
 
     while True:
+        if os.path.exists(Command.get_pwd()):
+            os.chdir(Command.get_pwd())
+        
         sys.stdout.write("$ ")
         user_input = input()
         command_handler = _command_resolver(user_input)

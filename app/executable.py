@@ -23,6 +23,8 @@ def executable_factory(command: str):
 
 
 class Command:
+    cwd: dict = {"path": os.getcwd()}
+
     def __init__(self, command_str: str):
         self.command_str = command_str
         self.command_param = " ".join(command_str.split()[1:])
@@ -33,6 +35,10 @@ class Command:
 
     def __str__(self):
         return self.command_str.split(maxsplit=1)[0]
+
+    @classmethod
+    def get_pwd(cls):
+        return cls.cwd["path"]
 
 class ExecutableCommand(Command):
 
