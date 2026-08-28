@@ -1,4 +1,5 @@
 import os
+import subprocess
 from .Enums import Type
 
 def executable_factory(command: str):
@@ -27,7 +28,7 @@ class Command:
         self.command_param = " ".join(command_str.split()[1:])
         self.type = Type.UNKNOWN
 
-    def operation(self):
+    def run(self):
         pass
 
     def __str__(self):
@@ -39,3 +40,7 @@ class ExecutableCommand(Command):
         super().__init__(command_str)
         self.type = Type.EXECUTABLE
         self.path = path
+
+    def run(self):
+        subprocess.run(self.command_str.split())
+        return False, None

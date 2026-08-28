@@ -20,22 +20,22 @@ class BuiltinCommand(Command):
         super().__init__(command_str)
         self.type = Type.BUILTIN
 
-    def operation(self):
+    def run(self):
         pass
 
 
 class ExitBuiltinCommand(BuiltinCommand):
-    def operation(self):
+    def run(self):
         return True, None
 
 class EchoBuiltinCommand(BuiltinCommand):
-    def operation(self):
+    def run(self):
         print_words = self.command_param
         print(print_words)
         return False, None
 
 class TypeBuiltinCommand(BuiltinCommand):
-    def operation(self):
+    def run(self):
         command = builtin_factory(self.command_param)
         if command is None:
             # Could be a executable

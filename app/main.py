@@ -1,8 +1,12 @@
 import sys
 from .builtins import builtin_factory
+from .executable import executable_factory
 
 def _command_resolver(command_string: str):
-    return builtin_factory(command_string)
+    command_obj = builtin_factory(command_string)
+    if command_obj is None:
+        command_obj = executable_factory(command_string)
+    return command_obj
 
 
 def main():
@@ -16,7 +20,7 @@ def main():
             print(f"{user_input.split(" ")[0]}: command not found")
             continue
 
-        exit, output = command_handler.operation()
+        exit, output = command_handler.run()
 
         if exit:
             break
