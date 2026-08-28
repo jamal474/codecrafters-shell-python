@@ -13,6 +13,8 @@ def builtin_factory(command: str):
             return TypeBuiltinCommand(command)
         case "pwd":
             return PwdBuiltinCommand(command)
+        case "cd":
+            return CdBuiltinCommand(command)
         case _:
             return None
 
@@ -55,4 +57,15 @@ class TypeBuiltinCommand(BuiltinCommand):
 class PwdBuiltinCommand(BuiltinCommand):
     def run(self):
         print(os.getcwd())
+        return False, None
+
+class CdBuiltinCommand(BuiltinCommand):
+    def run(self):
+        path_string = self.command_str
+        if os.path.isabs(path_string):
+            if os.path.exists(path_string):
+                os.chdir(path_string)
+            else:
+                print(f"cd: {self.command_str}: No such file or directory")
+        
         return False, None
