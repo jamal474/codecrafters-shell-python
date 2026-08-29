@@ -1,6 +1,9 @@
 import os
 import subprocess
-from .Enums import Type
+from .enums import Type
+import logging
+
+logger = logging.getLogger(__name__)
 
 def executable_factory(command: str):
     command_type = command.split(maxsplit=1)[0]
@@ -37,8 +40,14 @@ class Command:
         return self.command_str.split(maxsplit=1)[0]
 
     @classmethod
-    def get_pwd(cls):
+    def get_cwd(cls):
+        logger.info(f"[GET] Current Working Directory: {cls.cwd["path"]}")
         return cls.cwd["path"]
+
+    @classmethod
+    def set_cwd(cls, path_str: str):
+        logger.info(f"[SET] Current Working Directory: {path_str}")
+        cls.cwd["path"] = path_str
 
 class ExecutableCommand(Command):
 

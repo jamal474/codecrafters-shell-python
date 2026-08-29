@@ -1,6 +1,17 @@
 import sys, os
+from dotenv import load_dotenv
 from .builtins import builtin_factory
 from .executable import executable_factory, Command
+import logging
+load_dotenv()
+
+logging.basicConfig(
+    level=os.getenv("LEVEL"),
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+logger = logging.getLogger(__name__)
 
 def _command_resolver(command_string: str):
     command_obj = builtin_factory(command_string)
@@ -11,10 +22,14 @@ def _command_resolver(command_string: str):
 
 def main():
 
+    def _resolve_cwd():
+        _cwd = Command.get_cwd()
+        if os.path.exists(_cwd):
+            logger.info(f"Changing Current Working Directory to {_cwd}")
+            os.chdir(_cwd)
+
     while True:
-        if os.path.exists(Command.get_pwd()):
-            os.chdir(Command.get_pwd())
-        
+        _resolve_cwd()
         sys.stdout.write("$ ")
         user_input = input()
         command_handler = _command_resolver(user_input)
@@ -31,4 +46,5 @@ def main():
 
 
 if __name__ == "__main__":
+    logger.info(f"Application Started: ENV {os.getenv("LEVEL")}")
     main()
