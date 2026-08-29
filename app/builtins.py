@@ -1,7 +1,7 @@
 import os
 import logging
 from .types import CommandType
-from .constants import CURRENT_DIR_PREFIX, PARENT_DIR_PREFIX
+from .constants import CURRENT_DIR_PREFIX, PARENT_DIR_PREFIX, HOME_DIR
 from .executable import executable_factory, Command
 
 logger = logging.getLogger(__name__)
@@ -64,6 +64,27 @@ class PwdBuiltinCommand(BuiltinCommand):
         return False, None
 
 class CdBuiltinCommand(BuiltinCommand):
+
+    def _home_path_handler(self, path_string: str):
+        if path_string == "" or path_string == None:
+            return False
+        try:
+            type_prefix, rest_str = path_string.split("/", maxsplit=1)
+        except Exception as e:
+            type_prefix = path_string.split("/", maxsplit=1)[0]
+            rest_str = ""
+
+        if type_prefix != HOME_DIR:
+            return False
+
+        absolute_path = os.path.join(os.getenv("HOME"),
+                                     rest_str)
+        logger.info(f"Absolute path : {absolute_path}")
+        if not os.path.exists(absolute_path):
+            return False
+        
+        self.set_cwd(absolute_path)
+        return True
 
     def _abs_path_handler(self, path_string: str):
         """
@@ -149,7 +170,8 @@ class CdBuiltinCommand(BuiltinCommand):
     
     def run(self):
         path_string = self.command_param
-        path_exists = ( self._abs_path_handler(path_string) or 
+        path_exists = ( self._home_path_handler(path_string) or 
+                       self._abs_path_handler(path_string) or 
                        self._relative_path_handler(path_string))
         if not path_exists:
             print(f"cd: {self.command_param}: No such file or directory")
