@@ -1,8 +1,8 @@
-from app.enums import Type
-from app.constants import CURRENT_DIR_PREFIX, PARENT_DIR_PREFIX
-from app.executable import executable_factory, Command
 import os
 import logging
+from .types import CommandType
+from .constants import CURRENT_DIR_PREFIX, PARENT_DIR_PREFIX
+from .executable import executable_factory, Command
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ class BuiltinCommand(Command):
 
     def __init__(self, command_str: str):
         super().__init__(command_str)
-        self.type = Type.BUILTIN
+        self.type = CommandType.BUILTIN
 
     def run(self):
         pass
@@ -53,7 +53,7 @@ class TypeBuiltinCommand(BuiltinCommand):
                 print(f"{command} is {command.path}")
             else:
                 print(f"{self.command_param.split(maxsplit=1)[0]}: not found")
-        elif command.type == Type.BUILTIN:
+        elif command.type == CommandType.BUILTIN:
             print(f"{self.command_param.split(maxsplit=1)[0]} is a shell builtin")
 
         return False, None

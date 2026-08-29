@@ -1,7 +1,7 @@
 import os
 import subprocess
-from .enums import Type
 import logging
+from .types import CommandType
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ class Command:
     def __init__(self, command_str: str):
         self.command_str = command_str
         self.command_param = " ".join(command_str.split()[1:])
-        self.type = Type.UNKNOWN
+        self.type = CommandType.UNKNOWN
 
     def run(self):
         pass
@@ -53,7 +53,7 @@ class ExecutableCommand(Command):
 
     def __init__(self, command_str: str, path: str):
         super().__init__(command_str)
-        self.type = Type.EXECUTABLE
+        self.type = CommandType.EXECUTABLE
         self.path = path
 
     def run(self):

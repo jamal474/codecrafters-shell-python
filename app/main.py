@@ -1,8 +1,9 @@
 import sys, os
+import logging
 from dotenv import load_dotenv
 from .builtins import builtin_factory
 from .executable import executable_factory, Command
-import logging
+
 load_dotenv()
 
 logging.basicConfig(
