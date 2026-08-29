@@ -31,7 +31,7 @@ def main():
 
     while True:
         _resolve_cwd()
-        sys.stdout.write("$ ")
+        sys.stdout.write("$")
         user_input = input()
         command_handler = _command_resolver(user_input)
 
