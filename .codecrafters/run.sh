@@ -15,6 +15,6 @@ SCRIPT_DIR="$(dirname "$0")"
 PYTHONSAFEPATH=1 PYTHONPATH="$SCRIPT_DIR" exec uv run \
   --project "$SCRIPT_DIR" \
   --quiet \
-  --env-file .env\
+  --env-file .env.remote\
   -m app.main \
   "$@"
