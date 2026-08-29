@@ -75,12 +75,15 @@ class CdBuiltinCommand(BuiltinCommand):
         Returns:
             bool: signifying wether path is absolute or not
         """
-        if os.path.isabs(path_string):
-            if os.path.exists(path_string):
-                self.set_cwd(path_string)
-
-            return True
-        return False
+        if path_string == "" or path_string == None:
+            return False
+        
+        if ( not os.path.isabs(path_string) or
+            not os.path.exists(path_string)):
+            return False
+        
+        self.set_cwd(path_string)
+        return True
     
     def _resolve_parent_stack(self, parent_str: str):
         logger.info("Resolve Parent Stack Command")
@@ -117,27 +120,32 @@ class CdBuiltinCommand(BuiltinCommand):
             type_prefix = path_string.split("/", maxsplit=1)[0]
 
         if type_prefix == CURRENT_DIR_PREFIX:
+
             logger.info(f"Type Prefix: Current Directory {type_prefix}")
             absolute_path = os.path.join(self.get_cwd(), rest_str)
             logger.info(f"Absolute path : {absolute_path}")
-            if os.path.exists(absolute_path):
-                self.set_cwd(absolute_path)
-            return True
+            if not os.path.exists(absolute_path):
+                return False
+            self.set_cwd(absolute_path)
+        
         elif type_prefix == PARENT_DIR_PREFIX:
+
             logger.info(f"Type Prefix: Parent Directory {type_prefix}")
             parent_wd, rest_str = self._resolve_parent_stack(path_string)
             absolute_path = os.path.join(parent_wd, rest_str)
             logger.info(f"Absolute path : {absolute_path}")
-            if os.path.exists(absolute_path):
-                self.set_cwd(absolute_path)
-            return True
+            if not os.path.exists(absolute_path):
+                return False
+            self.set_cwd(absolute_path)
+        
         else:
             logger.info(f"Type Prefix: Not Among ./ or ../ {type_prefix}")
             absolute_path = os.path.join(self.get_cwd(), path_string)
-            if os.path.exists(absolute_path):
-                self.set_cwd(absolute_path)
-                return True
-        return False
+            if not os.path.exists(absolute_path):
+                return False
+            self.set_cwd(absolute_path)
+
+        return True
     
     def run(self):
         path_string = self.command_param
