@@ -1,6 +1,6 @@
-from .enums import Type
-from .constants import CURRENT_DIR_PREFIX, PARENT_DIR_PREFIX
-from .executable import executable_factory, Command
+from app.enums import Type
+from app.constants import CURRENT_DIR_PREFIX, PARENT_DIR_PREFIX
+from app.executable import executable_factory, Command
 import os
 import logging
 
@@ -115,7 +115,7 @@ class CdBuiltinCommand(BuiltinCommand):
         except Exception as e:
             logger.info("path does not have enough separator to split")
             type_prefix = path_string.split("/", maxsplit=1)[0]
-            
+
         if type_prefix == CURRENT_DIR_PREFIX:
             logger.info(f"Type Prefix: Current Directory {type_prefix}")
             absolute_path = os.path.join(self.get_cwd(), rest_str)
